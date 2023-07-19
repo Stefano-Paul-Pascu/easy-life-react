@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
+
+
+.wallpaper{
+  color: rgb(255, 255, 255);
+  background-image: url("https://getwallpapers.com/wallpaper/full/7/8/0/1498119-mind-relaxing-wallpapers-1920x1200-mac.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.wallpaper2{
+  color: rgb(255, 255, 255);
+  background-image: url("https://getwallpapers.com/wallpaper/full/7/8/0/1498119-mind-relaxing-wallpapers-1920x1200-mac.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.easy-life-h1{
+  font-size: 5rem;
+  color: rgb(255, 255, 255);
+}
+
+.profilebg{
+  background-image: url(http://wallpapers.net/web/wallpapers/relaxing-backgrounds-hd-wallpaper-for-desktop-mobiles/3840x2160.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.opa{
+  --bs-bg-opacity: .5;
+}
+
+.navbg{
+  --bs-bg-opacity: .5;
+ /* margin-bottom: 56px; */
+}
+
+.responsive{
+  @media (max-width: 360px) {
+      display: flex;
+      flex-direction: column;;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.homebg{
+  background-image: url("https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
