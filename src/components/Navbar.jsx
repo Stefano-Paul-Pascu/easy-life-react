@@ -22,7 +22,7 @@ function MyNavbar() {
           </Nav>
           <Nav>
             <NavDropdown title="Profilo Utente" id="collasible-nav-dropdown" className="me-5">
-              <NavDropdown.Item href="./profile">Modifica Profilo</NavDropdown.Item>
+              <NavDropdown.Item href="./profile">Il tuo profilo</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={handleLogout}>Esci</NavDropdown.Item>
             </NavDropdown>

@@ -7,10 +7,11 @@ import MyNavbar from "./Navbar";
 const Home = () => {
   const [impegni, setImpegni] = useState([]);
   const [nuovoImpegno, setNuovoImpegno] = useState({
+    idUtente: "",
     data: "",
     ora: "",
     impegno: "",
-    stato: false,
+    statoImpegno: 'DA_FARE',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,6 +20,11 @@ const Home = () => {
   useEffect(() => {
     // Esegui il fetch degli impegni all'avvio della pagina
     fetchImpegni();
+  }, []);
+
+  useEffect(() => {
+    // Esegui il fetch degli impegni all'avvio della pagina
+    getUserId();
   }, []);
 
   const fetchImpegni = async () => {
@@ -31,6 +37,8 @@ const Home = () => {
       });
       if (response.ok) {
         const data = await response.json();
+        console.log('data fetchImpegno', data);
+
         setImpegni(data);
       } else {
         setError("Errore durante il recupero degli impegni.");
@@ -41,11 +49,24 @@ const Home = () => {
     }
   };
 
+  const getUserId = () => {
+    const userId = JSON.parse(localStorage.getItem('utenteLoggato'));
+    setNuovoImpegno({
+      ...nuovoImpegno,
+      idUtente: userId
+    })
+  };
+
   const aggiungiImpegno = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+   
     try {
+      getUserId();
+      console.log('nuovoImpegno', nuovoImpegno)
+      console.log(JSON.stringify(nuovoImpegno))
+      console.log('impegni', impegni)
       const token = JSON.parse(localStorage.getItem("token"));
       const response = await fetch(`http://localhost:3001/impegni`, {
         method: "POST",
@@ -58,14 +79,9 @@ const Home = () => {
       if (response.ok) {
         // Aggiornamento della lista degli impegni dopo l'aggiunta
         const data = await response.json();
+        console.log('data aggiungiImpegno', data);
         setImpegni((prevImpegni) => [...prevImpegni, data]);
-
-        setNuovoImpegno({
-          data: "",
-          ora: "",
-          impegno: "",
-          stato: false,
-        });
+        // const userId = JSON.parse(localStorage.getItem('utenteLoggato'));
       } else {
         setError("Errore durante l'aggiunta dell'impegno.");
       }
@@ -76,16 +92,29 @@ const Home = () => {
     setIsLoading(false);
   };
 
-  const modificaImpegno = async (id, nuovoStato) => {
+  const modificaImpegno = async (impegno) => {
+    console.log('impegno Modifica', impegno)
     try {
+      console.log('ID UTENTE LOGGATO', JSON.parse(localStorage.getItem('utenteLoggato')))
+      // const id = JSON.parse(localStorage.getItem('utenteLoggato'));
+      const id = 'd608a587-ec97-4f58-9815-50bf964c30ac'
       const token = JSON.parse(localStorage.getItem("token"));
+
+      const newImpegno = { ...impegno }
+
+      newImpegno.idUtente = 'b2bd16b7-6112-40da-b3f7-f303f9c49d8e';
+      delete newImpegno.id;
+
+
+      console.log('newImpegno', newImpegno)
+
       const response = await fetch(`http://localhost:3001/impegni/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(nuovoStato),
+        body: JSON.stringify(newImpegno),
       });
       if (response.ok) {
         // Aggiorna la lista degli impegni dopo la modifica
@@ -239,9 +268,10 @@ const Home = () => {
               </Col>
             </Row>
             <hr />
-
-            {impegni.map((impegno) => (
-              <Row key={impegno.id}>
+            {impegni
+                .sort((a, b) => new Date(a.data) - new Date(b.data))
+                .map((impegno) => (
+        <Row key={impegno.id} className="mb-3">
                 <Col>
                   <div>{impegno.data}</div>
                 </Col>
@@ -257,15 +287,13 @@ const Home = () => {
                       id={`checkbox-${impegno.id}`}
                       type="checkbox"
                       className="me-1"
-                      checked={impegno.stato}
+                      checked={impegno.statoImpegno === "FATTA" ? true : false}
                       onChange={() =>
-                        modificaImpegno(impegno.id, {
-                          stato: !impegno.stato,
-                        })
+                        modificaImpegno(impegno)
                       }
                     />
                     <label htmlFor={`checkbox-${impegno.id}`}>
-                      {impegno.stato ? "Fatto" : "Da fare"}
+                      {impegno.statoImpegno  === "FATTA" ? "FATTA" : "DA FARE"}
                     </label>
                   </div>
                 </Col>
@@ -275,9 +303,7 @@ const Home = () => {
                       type="button"
                       className="btn btn-outline-warning me-2"
                       onClick={() =>
-                        modificaImpegno(impegno.id, {
-                          stato: !impegno.stato,
-                        })
+                        modificaImpegno(impegno)
                       }
                     >
                       <svg

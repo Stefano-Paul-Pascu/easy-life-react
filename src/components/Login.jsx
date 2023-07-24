@@ -14,11 +14,6 @@ const Login = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [utenteLoggato, setUtenteLoggato] = useState(null);
-
-  useEffect(() => {
-      localStorage.setItem("utenteLoggato", JSON.stringify(utenteLoggato));
-  }, [utenteLoggato])
 
   const handleClick = async (e) => {
       e.preventDefault();
@@ -35,8 +30,7 @@ const Login = () => {
           if (response.ok) {
               const userData = await response.json();
               localStorage.setItem("token", JSON.stringify(userData.jwtToken));
-              setUtenteLoggato(userData.u);
-
+              localStorage.setItem("utenteLoggato", JSON.stringify(userData.u.id));
               navigator("/home");
           } else {
               setError("Credenziali errate. Riprova.");
