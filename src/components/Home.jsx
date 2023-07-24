@@ -1,6 +1,6 @@
 import { Container, Row, Col, Button, Form, Dropdown, DropdownButton } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import MyNavbar from "./Navbar";
 
 
@@ -92,41 +92,7 @@ const Home = () => {
     setIsLoading(false);
   };
 
-  const modificaImpegno = async (impegno) => {
-    console.log('impegno Modifica', impegno)
-    try {
-      console.log('ID UTENTE LOGGATO', JSON.parse(localStorage.getItem('utenteLoggato')))
-      // const id = JSON.parse(localStorage.getItem('utenteLoggato'));
-      const id = 'd608a587-ec97-4f58-9815-50bf964c30ac'
-      const token = JSON.parse(localStorage.getItem("token"));
-
-      const newImpegno = { ...impegno }
-
-      newImpegno.idUtente = 'b2bd16b7-6112-40da-b3f7-f303f9c49d8e';
-      delete newImpegno.id;
-
-
-      console.log('newImpegno', newImpegno)
-
-      const response = await fetch(`http://localhost:3001/impegni/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newImpegno),
-      });
-      if (response.ok) {
-        // Aggiorna la lista degli impegni dopo la modifica
-        fetchImpegni();
-      } else {
-        setError("Errore durante la modifica dell'impegno.");
-      }
-    } catch (error) {
-      console.log(error);
-      setError("Si è verificato un errore. Riprova più tardi.");
-    }
-  };
+  
 
   const cancellaImpegno = async (id) => {
     try {
@@ -154,7 +120,7 @@ const Home = () => {
       <MyNavbar />
       <Container className="mt-3">
         <Row className="vh-100">
-          <Col md={2} lg={2} xs={4} className="border-end">
+          <Col md={2} lg={2} xs={12} className="mb-3 mb-md-0">
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 <svg
@@ -230,29 +196,7 @@ const Home = () => {
           <Col className="responsive">
             <Row>
               <Col>
-                <DropdownButton
-                  id="dropdown-basic-button"
-                  title="Data"
-                  className=""
-                >
-                  <Dropdown href="#/action-1">
-                    <div className="px-3 py-0">
-                    <Form.Group className="" controlId="">
-                      <Form.Control
-                        type="date"
-                        placeholder="Inserisci una data"
-                        value={nuovoImpegno.data}
-                        onChange={(e) =>
-                          setNuovoImpegno({
-                            ...nuovoImpegno,
-                            data: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    </div>
-                  </Dropdown>
-                </DropdownButton>
+                <div>Data</div>
               </Col>
               <Col>
                 <div>Ora</div>
@@ -282,47 +226,14 @@ const Home = () => {
                   <div>{impegno.impegno}</div>
                 </Col>
                 <Col>
-                  <div className="form-check ps-0">
-                    <input
-                      id={`checkbox-${impegno.id}`}
-                      type="checkbox"
-                      className="me-1"
-                      checked={impegno.statoImpegno === "FATTA" ? true : false}
-                      onChange={() =>
-                        modificaImpegno(impegno)
-                      }
-                    />
-                    <label htmlFor={`checkbox-${impegno.id}`}>
-                      {impegno.statoImpegno  === "FATTA" ? "FATTA" : "DA FARE"}
-                    </label>
-                  </div>
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                    <label className="form-check-label" htmlFor="flexCheckDefault"></label>
+                </div>
                 </Col>
                 <Col>
                   <div>
-                    <button
-                      type="button"
-                      className="btn btn-outline-warning me-2"
-                      onClick={() =>
-                        modificaImpegno(impegno)
-                      }
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-pencil-square"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                        />
-                        <path
-                          fillRule="evenodd"
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                        />
-                      </svg>
-                    </button>
+                  
                     <button
                       type="button"
                       className="btn btn-outline-danger"
